@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TypingEnglish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-glass {
+                @apply bg-white/80 backdrop-blur-md;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-glass shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-neutral">Typing<span class="text-primary">English</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="Typegame1.html" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">主页</a>
+                <a href="contact.html" class="text-primary transition-colors duration-200 font-medium">联系我们</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <button class="hidden md:block px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    登录
+                </button>
+                <button class="md:hidden text-neutral text-xl" id="mobile-menu-btn">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <div class="px-4 py-3 flex flex-col space-y-3">
+                <a href="Typegame1.html" class="text-neutral hover:text-primary py-2">主页</a>
+                <a href="contact.html" class="text-neutral hover:text-primary py-2">联系我们</a>
+                <button class="w-full px-4 py-2 bg-primary text-white rounded-lg">登录</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-primary text-white p-6">
+                <h2 class="text-2xl font-bold">联系我们</h2>
+                <p class="opacity-90">我们很乐意听取您的意见</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-neutral mb-4">发送消息</h3>
+                        
+                        <form id="contact-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">您的姓名</label>
+                                <input type="text" id="name" name="name" required 
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">电子邮箱</label>
+                                <input type="email" id="email" name="email" required 
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">主题</label>
+                                <select id="subject" name="subject" 
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
+                                    <option value="general">一般咨询</option>
+                                    <option value="feedback">产品反馈</option>
+                                    <option value="bug">报告问题</option>
+                                    <option value="business">商业合作</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">消息内容</label>
+                                <textarea id="message" name="message" rows="5" required 
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"></textarea>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="consent" name="consent" type="checkbox" required 
+                                        class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="consent" class="font-medium text-gray-700">我同意TypingEnglish处理我的个人信息</label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" 
+                                class="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                发送消息
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold text-neutral mb-4">联系方式</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 bg-primary/10 p-3 rounded-full text-primary">
+                                    <i class="fa fa-envelope text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">电子邮件</h4>
+                                    <p class="text-gray-600">contact@typingenglish.com</p>
+                                    <p class="text-sm text-gray-500 mt-1">通常在24小时内回复</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 bg-primary/10 p-3 rounded-full text-primary">
+                                    <i class="fa fa-twitter text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Twitter</h4>
+                                    <p class="text-gray-600">@TypingEnglish</p>
+                                    <p class="text-sm text-gray-500 mt-1">关注我们获取最新动态</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 bg-primary/10 p-3 rounded-full text-primary">
+                                    <i class="fa fa-github text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">GitHub</h4>
+                                    <p class="text-gray-600">github.com/TypingEnglish</p>
+                                    <p class="text-sm text-gray-500 mt-1">查看我们的开源项目</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 成功消息模态框 -->
+        <div id="success-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
+                    <i class="fa fa-check text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-neutral mb-2">消息已发送!</h3>
+                <p class="text-gray-500 mb-6">感谢您的反馈，我们会尽快回复您。</p>
+                <button id="close-success-modal" 
+                    class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-neutral text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                        <h2 class="text-xl font-bold">Typing<span class="text-primary">English</span></h2>
+                    </div>
+                    <p class="text-gray-400">
+                        通过打字练习提高你的英语水平，一举两得!
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="Typegame1.html" class="hover:text-primary transition-colors duration-200">主页</a></li>
+                        <li><a href="contact.html" class="hover:text-primary transition-colors duration-200">联系我们</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">隐私政策</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">服务条款</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">关注我们</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fa fa-twitter mr-2 text-primary"></i>
+                            <a href="#" class="hover:text-primary transition-colors duration-200">Twitter</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-github mr-2 text-primary"></i>
+                            <a href="#" class="hover:text-primary transition-colors duration-200">GitHub</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-facebook mr-2 text-primary"></i>
+                            <a href="#" class="hover:text-primary transition-colors duration-200">Facebook</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+                &copy; 2025 TypingEnglish. 保留所有权利.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化函数
+        function init() {
+            // 移动端菜单切换
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+            
+            // 表单提交处理
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 获取表单数据
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    consent: document.getElementById('consent').checked
+                };
+                
+                // 这里应该是发送到服务器的代码
+                // 模拟发送过程
+                setTimeout(() => {
+                    // 显示成功消息
+                    document.getElementById('success-modal').classList.remove('hidden');
+                    
+                    // 重置表单
+                    this.reset();
+                }, 1000);
+            });
+            
+            // 关闭成功消息
+            document.getElementById('close-success-modal').addEventListener('click', () => {
+                document.getElementById('success-modal').classList.add('hidden');
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub - TypingEnglish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-glass {
+                @apply bg-white/80 backdrop-blur-md;
+            }
+            .repo-card {
+                @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+            }
+            .github-btn {
+                @apply px-4 py-2 rounded-md flex items-center space-x-2 transition-colors duration-200;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-glass shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-neutral">Typing<span class="text-primary">English</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="Typegame1.html" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">主页</a>
+                <a href="github.html" class="text-primary transition-colors duration-200 font-medium">GitHub</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/TypingEnglish/typing-english" target="_blank" class="hidden md:block px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center space-x-2">
+                    <i class="fa fa-github"></i>
+                    <span>Star on GitHub</span>
+                </a>
+                <button class="md:hidden text-neutral text-xl" id="mobile-menu-btn">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <div class="px-4 py-3 flex flex-col space-y-3">
+                <a href="Typegame1.html" class="text-neutral hover:text-primary py-2">主页</a>
+                <a href="github.html" class="text-neutral hover:text-primary py-2">GitHub</a>
+                <a href="https://github.com/TypingEnglish/typing-english" target="_blank" class="w-full px-4 py-2 bg-gray-800 text-white rounded-lg flex items-center justify-center space-x-2">
+                    <i class="fa fa-github"></i>
+                    <span>Star on GitHub</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-6xl mx-auto">
+            <!-- 项目标题 -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-neutral mb-2">TypingEnglish</h1>
+                    <p class="text-gray-600">通过打字练习提高英语水平的开源项目</p>
+                </div>
+                <div class="flex space-x-3 mt-4 md:mt-0">
+                    <a href="https://github.com/TypingEnglish/typing-english" target="_blank" class="github-btn bg-gray-800 text-white hover:bg-gray-900">
+                        <i class="fa fa-github"></i>
+                        <span>View on GitHub</span>
+                    </a>
+                    <a href="https://github.com/TypingEnglish/typing-english/fork" target="_blank" class="github-btn bg-gray-100 text-gray-800 hover:bg-gray-200">
+                        <i class="fa fa-code-fork"></i>
+                        <span>Fork</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 项目状态卡片 -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="repo-card">
+                    <div class="flex items-center space-x-2 text-gray-500 mb-1">
+                        <i class="fa fa-star"></i>
+                        <span class="text-sm">Stars</span>
+                    </div>
+                    <div class="text-2xl font-bold" id="stars-count">1,234</div>
+                </div>
+                <div class="repo-card">
+                    <div class="flex items-center space-x-2 text-gray-500 mb-1">
+                        <i class="fa fa-code-fork"></i>
+                        <span class="text-sm">Forks</span>
+                    </div>
+                    <div class="text-2xl font-bold" id="forks-count">456</div>
+                </div>
+                <div class="repo-card">
+                    <div class="flex items-center space-x-2 text-gray-500 mb-1">
+                        <i class="fa fa-eye"></i>
+                        <span class="text-sm">Watchers</span>
+                    </div>
+                    <div class="text-2xl font-bold" id="watchers-count">789</div>
+                </div>
+                <div class="repo-card">
+                    <div class="flex items-center space-x-2 text-gray-500 mb-1">
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="text-sm">Issues</span>
+                    </div>
+                    <div class="text-2xl font-bold" id="issues-count">23</div>
+                </div>
+            </div>
+            
+            <!-- 项目介绍 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-neutral mb-4">项目介绍</h2>
+                    <div class="prose max-w-none">
+                        <p>TypingEnglish 是一个开源项目，旨在通过打字练习帮助用户提高英语水平。项目包含以下主要功能：</p>
+                        <ul class="list-disc pl-5">
+                            <li>多种难度级别的英文句子打字练习</li>
+                            <li>实时打字速度(WPM)和准确率统计</li>
+                            <li>练习模式和挑战模式</li>
+                            <li>排行榜系统</li>
+                            <li>个性化设置</li>
+                        </ul>
+                        <p>项目采用现代Web技术构建，包括HTML5、CSS3(TailwindCSS)和JavaScript。我们欢迎任何形式的贡献！</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 项目结构 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-neutral mb-4">项目结构</h2>
+                    <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+                        <div class="flex items-center py-1">
+                            <i class="fa fa-folder-open text-blue-500 mr-2"></i>
+                            <span>typing-english/</span>
+                        </div>
+                        <div class="pl-6">
+                            <div class="flex items-center py-1">
+                                <i class="fa fa-folder text-blue-500 mr-2"></i>
+                                <span>src/</span>
+                            </div>
+                            <div class="pl-6">
+                                <div class="flex items-center py-1">
+                                    <i class="fa fa-file-code-o text-gray-500 mr-2"></i>
+                                    <span>Typegame1.html</span>
+                                </div>
+                                <div class="flex items-center py-1">
+                                    <i class="fa fa-file-code-o text-gray-500 mr-2"></i>
+                                    <span>styles.css</span>
+                                </div>
+                                <div class="flex items-center py-1">
+                                    <i class="fa fa-file-code-o text-gray-500 mr-2"></i>
+                                    <span>app.js</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center py-1">
+                                <i class="fa fa-folder text-blue-500 mr-2"></i>
+                                <span>assets/</span>
+                            </div>
+                            <div class="flex items-center py-1">
+                                <i class="fa fa-file-text-o text-gray-500 mr-2"></i>
+                                <span>README.md</span>
+                            </div>
+                            <div class="flex items-center py-1">
+                                <i class="fa fa-file-text-o text-gray-500 mr-2"></i>
+                                <span>LICENSE</span>
+                            </div>
+                            <div class="flex items-center py-1">
+                                <i class="fa fa-file-text-o text-gray-500 mr-2"></i>
+                                <span>package.json</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 贡献指南 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-neutral mb-4">贡献指南</h2>
+                    <div class="prose max-w-none">
+                        <p>我们欢迎各种形式的贡献！以下是参与项目的方式：</p>
+                        
+                        <h3 class="font-bold text-lg mt-4">报告问题</h3>
+                        <p>如果您发现任何问题或有改进建议，请通过GitHub Issues提交。</p>
+                        
+                        <h3 class="font-bold text-lg mt-4">提交Pull Request</h3>
+                        <ol class="list-decimal pl-5">
+                            <li>Fork项目仓库</li>
+                            <li>创建您的功能分支 (<code>git checkout -b feature/AmazingFeature</code>)</li>
+                            <li>提交您的更改 (<code>git commit -m 'Add some AmazingFeature'</code>)</li>
+                            <li>推送到分支 (<code>git push origin feature/AmazingFeature</code>)</li>
+                            <li>打开Pull Request</li>
+                        </ol>
+                        
+                        <h3 class="font-bold text-lg mt-4">开发环境设置</h3>
+                        <pre class="bg-gray-50 p-3 rounded-md"><code># 克隆项目
+git clone https://github.com/TypingEnglish/typing-english.git
+
+# 进入项目目录
+cd typing-english
+
+# 安装依赖 (如果需要)
+npm install
+
+# 启动开发服务器 (如果有)
+npm run dev</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 贡献者 -->
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-neutral mb-4">贡献者</h2>
+                    <div class="flex flex-wrap gap-4" id="contributors">
+                        <!-- 贡献者列表将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-neutral text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                        <h2 class="text-xl font-bold">Typing<span class="text-primary">English</span></h2>
+                    </div>
+                    <p class="text-gray-400">
+                        通过打字练习提高你的英语水平，一举两得!
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">项目链接</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="Typegame1.html" class="hover:text-primary transition-colors duration-200">主页</a></li>
+                        <li><a href="https://github.com/TypingEnglish/typing-english" target="_blank" class="hover:text-primary transition-colors duration-200">GitHub仓库</a></li>
+                        <li><a href="https://github.com/TypingEnglish/typing-english/issues" target="_blank" class="hover:text-primary transition-colors duration-200">问题跟踪</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">文档</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">社区</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fa fa-github mr-2 text-primary"></i>
+                            <a href="https://github.com/TypingEnglish" target="_blank" class="hover:text-primary transition-colors duration-200">GitHub组织</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-twitter mr-2 text-primary"></i>
+                            <a href="#" class="hover:text-primary transition-colors duration-200">Twitter</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-discord mr-2 text-primary"></i>
+                            <a href="#" class="hover:text-primary transition-colors duration-200">Discord</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+                &copy; 2025 TypingEnglish. 保留所有权利. 本项目采用 MIT 许可证.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化函数
+        async function init() {
+            // 移动端菜单切换
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+            
+            // 模拟获取GitHub仓库数据
+            async function fetchGitHubStats() {
+                // 实际项目中应该调用GitHub API
+                // 这里使用模拟数据
+                return {
+                    stargazers_count: 1234,
+                    forks_count: 456,
+                    watchers_count: 789,
+                    open_issues_count: 23
+                };
+            }
+            
+            // 模拟获取贡献者数据
+            async function fetchContributors() {
+                // 实际项目中应该调用GitHub API
+                // 这里使用模拟数据
+                return [
+                    { login: 'devuser1', avatar_url: 'https://avatars.githubusercontent.com/u/1?v=4', html_url: 'https://github.com/devuser1' },
+                    { login: 'coder2', avatar_url: 'https://avatars.githubusercontent.com/u/2?v=4', html_url: 'https://github.com/coder2' },
+                    { login: 'webdev3', avatar_url: 'https://avatars.githubusercontent.com/u/3?v=4', html_url: 'https://github.com/webdev3' },
+                    { login: 'designer4', avatar_url: 'https://avatars.githubusercontent.com/u/4?v=4', html_url: 'https://github.com/designer4' },
+                    { login: 'contributor5', avatar_url: 'https://avatars.githubusercontent.com/u/5?v=4', html_url: 'https://github.com/contributor5' }
+                ];
+            }
+            
+            // 更新GitHub统计信息
+            const stats = await fetchGitHubStats();
+            document.getElementById('stars-count').textContent = stats.stargazers_count.toLocaleString();
+            document.getElementById('forks-count').textContent = stats.forks_count.toLocaleString();
+            document.getElementById('watchers-count').textContent = stats.watchers_count.toLocaleString();
+            document.getElementById('issues-count').textContent = stats.open_issues_count.toLocaleString();
+            
+            // 更新贡献者列表
+            const contributors = await fetchContributors();
+            const contributorsContainer = document.getElementById('contributors');
+            contributors.forEach(contributor => {
+                const contributorElement = document.createElement('div');
+                contributorElement.className = 'flex flex-col items-center';
+                contributorElement.innerHTML = `
+                    <a href="${contributor.html_url}" target="_blank" class="group">
+                        <img src="${contributor.avatar_url}" alt="${contributor.login}" 
+                            class="w-16 h-16 rounded-full mb-2 group-hover:ring-2 group-hover:ring-primary transition-all duration-200">
+                        <span class="text-sm text-gray-700 group-hover:text-primary transition-colors duration-200">${contributor.login}</span>
+                    </a>
+                `;
+                contributorsContainer.appendChild(contributorElement);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

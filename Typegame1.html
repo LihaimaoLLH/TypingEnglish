@@ -1,0 +1,2386 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字练习 - TypingEnglish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36D399',
+                        danger: '#F87272',
+                        neutral: '#1E293B',
+                        'neutral-light': '#F8FAFC',
+                        gold: '#FFD700',
+                        silver: '#C0C0C0',
+                        bronze: '#CD7F32'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .typing-active {
+                @apply border-b-2 border-primary animate-pulse;
+            }
+            .char-correct {
+                @apply text-secondary;
+            }
+            .char-incorrect {
+                @apply text-danger line-through;
+            }
+            .bg-glass {
+                @apply bg-white/80 backdrop-blur-md;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .achievement-card {
+                @apply bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:shadow-lg hover:transform hover:-translate-y-1;
+            }
+            .achievement-locked {
+                @apply bg-gray-100 text-gray-400;
+            }
+            .achievement-unlocked {
+                @apply bg-primary/10 border-l-4 border-primary;
+            }
+            .medal-gold {
+                @apply text-gold;
+            }
+            .medal-silver {
+                @apply text-silver;
+            }
+            .medal-bronze {
+                @apply text-bronze;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-glass shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                <h1 class="text-xl font-bold text-neutral">Typing<span class="text-primary">English</span></h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#" id="home-link" class="text-primary transition-colors duration-200 font-medium">主页</a>
+                <a href="#" id="practice-link" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">练习模式</a>
+                <a href="#" id="achievements-link" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">成就</a>
+                <a href="#" id="leaderboard-link" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">排行榜</a>
+                <a href="#" id="settings-link" class="text-neutral hover:text-primary transition-colors duration-200 font-medium">设置</a>
+            </nav>
+            <div class="flex items-center space-x-3">
+                <div id="user-points" class="hidden md:flex items-center bg-primary/10 px-3 py-1 rounded-full">
+                    <i class="fa fa-star text-yellow-500 mr-1"></i>
+                    <span class="font-medium">0</span>
+                </div>
+                <div id="user-info" class="hidden items-center space-x-2">
+                    <span id="username-display" class="font-medium"></span>
+                    <button id="logout-btn" class="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200">
+                        退出
+                    </button>
+                </div>
+                <button id="login-btn" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    登录
+                </button>
+                <button class="md:hidden text-neutral text-xl" id="mobile-menu-btn">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <div class="px-4 py-3 flex flex-col space-y-3">
+                <a href="#" class="text-neutral hover:text-primary py-2 home-mobile-link">主页</a>
+                <a href="#" class="text-neutral hover:text-primary py-2 practice-mobile-link">练习模式</a>
+                <a href="#" class="text-neutral hover:text-primary py-2 achievements-mobile-link">成就</a>
+                <a href="#" class="text-neutral hover:text-primary py-2 leaderboard-mobile-link">排行榜</a>
+                <a href="#" class="text-neutral hover:text-primary py-2 settings-mobile-link">设置</a>
+                <div id="mobile-user-info" class="hidden">
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-neutral">用户:</span>
+                        <span id="mobile-username" class="font-medium"></span>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                        <span class="text-neutral">积分:</span>
+                        <span id="mobile-points" class="font-medium">0</span>
+                    </div>
+                    <button id="mobile-logout-btn" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg mt-2">退出登录</button>
+                </div>
+                <div id="mobile-login-section" class="pt-2">
+                    <button class="w-full px-4 py-2 bg-primary text-white rounded-lg">登录</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 - 动态加载内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8" id="main-content">
+        <!-- 默认显示主页内容 -->
+        <div id="home-page">
+            <!-- 游戏卡片 -->
+            <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
+                <!-- 游戏头部 -->
+                <div class="bg-primary text-white p-6">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold">单词挑战</h2>
+                        <div class="flex space-x-4">
+                            <div class="text-center">
+                                <p class="text-sm opacity-80">时间</p>
+                                <p id="timer" class="text-xl font-bold">120sec</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm opacity-80">分数</p>
+                                <p id="score" class="text-xl font-bold">0</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm opacity-80">速度</p>
+                                <p id="wpm" class="text-xl font-bold">0 WPM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 游戏内容区 -->
+                <div class="p-6">
+                    <!-- 难度选择 -->
+                    <div class="mb-6 flex justify-between items-center">
+                        <div class="text-neutral">
+                            <p class="text-sm">难度</p>
+                            <select id="difficulty" class="bg-gray-100 border-0 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:bg-white">
+                                <option value="easy">简单</option>
+                                <option value="medium" selected>中等</option>
+                                <option value="hard">困难</option>
+                                <option value="expert">专家</option>
+                            </select>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="pause-btn" class="px-4 py-3 bg-gray-200 text-neutral rounded-lg hover:bg-gray-300 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center hidden">
+                                <i class="fa fa-pause mr-2"></i> 暂停
+                            </button>
+                            <button id="start-btn" class="px-6 py-3 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center">
+                                <i class="fa fa-play mr-2"></i> 开始游戏
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 句子显示区 -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded-xl min-h-[120px] flex items-center">
+                        <p id="sentence" class="text-lg md:text-xl text-neutral">
+                            准备好了吗?点击开始按钮,然后输入显示的英文句子.
+                        </p>
+                    </div>
+
+                    <!-- 输入区域 -->
+                    <div class="mb-6">
+                        <label for="typing-input" class="block text-sm font-medium text-gray-700 mb-2">输入区</label>
+                        <input 
+                            type="text" 
+                            id="typing-input" 
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 outline-none"
+                            placeholder="开始输入..."
+                            disabled
+                        >
+                    </div>
+
+                    <!-- 统计信息 -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">正确率</p>
+                            <p id="accuracy" class="text-xl font-bold text-neutral">0%</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">已完成单词</p>
+                            <p id="words-completed" class="text-xl font-bold text-neutral">0</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500">错误数</p>
+                            <p id="errors" class="text-xl font-bold text-neutral">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游戏说明 -->
+            <div class="max-w-4xl mx-auto mt-8 bg-white rounded-2xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-neutral mb-4">游戏说明</h3>
+                <div class="space-y-3 text-gray-600">
+                    <p>1. 选择难度后点击"开始游戏"按钮</p>
+                    <p>2. 输入显示的英文句子,尽量快速且准确</p>
+                    <p>3. 游戏时间结束后,系统会计算你的打字速度和准确率</p>
+                    <p>4. 正确率越高,获得的分数越多</p>
+                    <p>5. 提高你的打字速度和英语水平!</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 练习模式页面 (初始隐藏) -->
+        <div id="practice-page" class="hidden max-w-4xl mx-auto">
+            <!-- 内容由JavaScript动态加载 -->
+        </div>
+        
+        <!-- 成就页面 (初始隐藏) -->
+        <div id="achievements-page" class="hidden max-w-4xl mx-auto">
+            <!-- 内容由JavaScript动态加载 -->
+        </div>
+        
+        <!-- 排行榜页面 (初始隐藏) -->
+        <div id="leaderboard-page" class="hidden max-w-4xl mx-auto">
+            <!-- 内容由JavaScript动态加载 -->
+        </div>
+        
+        <!-- 设置页面 (初始隐藏) -->
+        <div id="settings-page" class="hidden max-w-4xl mx-auto">
+            <!-- 内容由JavaScript动态加载 -->
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-neutral text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fa fa-keyboard-o text-primary text-2xl"></i>
+                        <h2 class="text-xl font-bold">Typing<span class="text-primary">English</span></h2>
+                    </div>
+                    <p class="text-gray-400">
+                        通过打字练习提高你的英语水平,一举两得!
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">主页</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">练习模式</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">成就</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">排行榜</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors duration-200">设置</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">联系我们</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope-o mr-2 text-primary"></i>
+                            <a href="contact.html" class="hover:text-primary transition-colors duration-200">contact@typingenglish.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-github mr-2 text-primary"></i>
+                            <a href="Github.html" class="hover:text-primary transition-colors duration-200">GitHub</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-twitter mr-2 text-primary"></i>
+                            <a href="twitter.html" class="hover:text-primary transition-colors duration-200">Twitter</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+                &copy; 2025 TypingEnglish. 保留所有权利.
+            </div>
+        </div>
+    </footer>
+
+    <!-- 游戏结束模态框 -->
+    <div id="game-over-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modal-content">
+            <div class="p-6 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
+                    <i class="fa fa-trophy text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-neutral mb-2">游戏结束!</h3>
+                <p class="text-gray-500 mb-6">你的成绩</p>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500">最终分数</p>
+                        <p id="final-score" class="text-2xl font-bold text-primary">0</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500">打字速度</p>
+                        <p id="final-wpm" class="text-2xl font-bold text-primary">0 WPM</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500">正确率</p>
+                        <p id="final-accuracy" class="text-2xl font-bold text-primary">0%</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-500">完成单词</p>
+                        <p id="final-words" class="text-2xl font-bold text-primary">0</p>
+                    </div>
+                </div>
+                
+                <div id="achievement-notification" class="hidden mb-4 p-3 bg-green-100 text-green-800 rounded-lg">
+                    <i class="fa fa-trophy mr-2"></i>
+                    <span id="achievement-text"></span>
+                    <span id="achievement-points" class="font-bold ml-2"></span>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button id="play-again-btn" class="flex-1 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200">
+                        返回主页
+                    </button>
+                    <button id="share-btn" class="flex-1 px-4 py-3 bg-gray-200 text-neutral rounded-lg hover:bg-gray-300 transition-all duration-200">
+                        分享成绩
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录/注册模态框 -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="auth-modal-content">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-neutral" id="auth-modal-title">登录</h3>
+                    <button id="close-auth-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex border-b border-gray-200 mb-6">
+                    <button id="login-tab" class="flex-1 py-2 font-medium text-primary border-b-2 border-primary">登录</button>
+                    <button id="register-tab" class="flex-1 py-2 font-medium text-gray-500">注册</button>
+                </div>
+                
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="login-username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                        <input type="text" id="login-username" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                        <input type="password" id="login-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-700">记住我</label>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200">
+                        登录
+                    </button>
+                </form>
+                
+                <form id="register-form" class="space-y-4 hidden">
+                    <div>
+                        <label for="register-username" class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
+                        <input type="text" id="register-username" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                        <p class="text-xs text-gray-500 mt-1">用户名长度3-20个字符，只能包含字母、数字和下划线</p>
+                    </div>
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">邮箱</label>
+                        <input type="email" id="register-email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">密码</label>
+                        <input type="password" id="register-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                        <p class="text-xs text-gray-500 mt-1">密码长度至少6个字符</p>
+                    </div>
+                    <div>
+                        <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">确认密码</label>
+                        <input type="password" id="register-confirm-password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" required>
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-all duration-200">
+                        注册
+                    </button>
+                </form>
+                
+                <div id="auth-message" class="mt-4 p-3 rounded-lg hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音频元素 -->
+    <audio id="typing-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="correct-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="error-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="complete-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="game-start-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="game-over-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+    <audio id="achievement-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==" type="audio/wav">
+    </audio>
+
+    <script>
+        // 声音管理器
+        class SoundManager {
+            constructor() {
+                this.sounds = {
+                    typing: document.getElementById('typing-sound'),
+                    correct: document.getElementById('correct-sound'),
+                    error: document.getElementById('error-sound'),
+                    complete: document.getElementById('complete-sound'),
+                    gameStart: document.getElementById('game-start-sound'),
+                    gameOver: document.getElementById('game-over-sound'),
+                    achievement: document.getElementById('achievement-sound')
+                };
+                
+                this.enabled = true;
+                this.volume = 0.5;
+                this.lastTypingTime = 0;
+                this.typingCooldown = 50; // 打字音效冷却时间(毫秒)
+                
+                this.initSounds();
+            }
+            
+            // 初始化声音
+            initSounds() {
+                // 为所有音频元素设置基本属性
+                Object.values(this.sounds).forEach(sound => {
+                    sound.volume = this.volume;
+                });
+                
+                // 生成简单的音效
+                this.generateSounds();
+            }
+            
+            // 生成简单的音效 (使用Web Audio API)
+            generateSounds() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // 打字音效 - 短促的点击声
+                    this.generateTypingSound(audioContext);
+                    
+                    // 正确音效 - 清脆的提示音
+                    this.generateCorrectSound(audioContext);
+                    
+                    // 错误音效 - 低沉的提示音
+                    this.generateErrorSound(audioContext);
+                    
+                    // 完成音效 - 上升的音调
+                    this.generateCompleteSound(audioContext);
+                    
+                    // 游戏开始音效
+                    this.generateGameStartSound(audioContext);
+                    
+                    // 游戏结束音效
+                    this.generateGameOverSound(audioContext);
+                    
+                    // 成就解锁音效
+                    this.generateAchievementSound(audioContext);
+                    
+                } catch (error) {
+                    console.warn('Web Audio API不支持，使用静音模式');
+                }
+            }
+            
+            // 生成打字音效
+            generateTypingSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            }
+            
+            // 生成正确音效
+            generateCorrectSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            }
+            
+            // 生成错误音效
+            generateErrorSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(220, audioContext.currentTime); // A3
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.4);
+            }
+            
+            // 生成完成音效
+            generateCompleteSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // 上升的音调
+                oscillator.frequency.setValueAtTime(261.63, audioContext.currentTime); // C4
+                oscillator.frequency.exponentialRampToValueAtTime(523.25, audioContext.currentTime + 0.5); // C5
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+            
+            // 生成游戏开始音效
+            generateGameStartSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(392, audioContext.currentTime); // G4
+                oscillator.frequency.exponentialRampToValueAtTime(523.25, audioContext.currentTime + 0.3); // C5
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+            
+            // 生成游戏结束音效
+            generateGameOverSound(audioContext) {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // 下降的音调
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.exponentialRampToValueAtTime(130.81, audioContext.currentTime + 1); // C3
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 1);
+            }
+            
+            // 生成成就解锁音效
+            generateAchievementSound(audioContext) {
+                const times = [0, 0.1, 0.2, 0.3, 0.4];
+                const frequencies = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+                
+                times.forEach((time, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(frequencies[index], audioContext.currentTime + time);
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime + time);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + time + 0.2);
+                    
+                    oscillator.start(audioContext.currentTime + time);
+                    oscillator.stop(audioContext.currentTime + time + 0.2);
+                });
+            }
+            
+            // 播放声音
+            play(soundName) {
+                if (!this.enabled) return;
+                
+                try {
+                    const sound = this.sounds[soundName];
+                    if (sound) {
+                        sound.currentTime = 0;
+                        sound.volume = this.volume;
+                        sound.play().catch(e => console.log('音频播放失败:', e));
+                    }
+                } catch (error) {
+                    console.log('播放声音失败:', error);
+                }
+            }
+            
+            // 播放打字音效 (带冷却时间)
+            playTyping() {
+                const now = Date.now();
+                if (now - this.lastTypingTime > this.typingCooldown) {
+                    this.play('typing');
+                    this.lastTypingTime = now;
+                }
+            }
+            
+            // 设置音量
+            setVolume(volume) {
+                this.volume = Math.max(0, Math.min(1, volume));
+                Object.values(this.sounds).forEach(sound => {
+                    sound.volume = this.volume;
+                });
+            }
+            
+            // 启用/禁用声音
+            setEnabled(enabled) {
+                this.enabled = enabled;
+            }
+            
+            // 切换声音状态
+            toggle() {
+                this.enabled = !this.enabled;
+                return this.enabled;
+            }
+        }
+
+        // 用户管理类 - 使用localStorage存储数据
+        class UserManager {
+            constructor() {
+                this.usersKey = 'typingGameUsers';
+                this.currentUserKey = 'typingGameCurrentUser';
+                this.achievementsKey = 'typingGameAchievements';
+                this.soundManager = new SoundManager();
+                this.initDefaultAchievements();
+            }
+
+            // 初始化默认成就
+            initDefaultAchievements() {
+                const defaultAchievements = [
+                    { id: 1, name: '打字新手', description: '完成第一局游戏', icon: 'fa-keyboard-o', medal: 'bronze', points: 10, conditionType: 'games_played', conditionValue: 1 },
+                    { id: 2, name: '速度之星', description: '打字速度达到50 WPM', icon: 'fa-bolt', medal: 'silver', points: 25, conditionType: 'wpm', conditionValue: 50 },
+                    { id: 3, name: '精准大师', description: '准确率达到95%', icon: 'fa-bullseye', medal: 'silver', points: 25, conditionType: 'accuracy', conditionValue: 95 },
+                    { id: 4, name: '百词斩', description: '累计完成100个单词', icon: 'fa-flag-checkered', medal: 'bronze', points: 15, conditionType: 'words_completed', conditionValue: 100 },
+                    { id: 5, name: '专家挑战者', description: '在专家难度下完成游戏', icon: 'fa-graduation-cap', medal: 'gold', points: 50, conditionType: 'expert_completion', conditionValue: 1 },
+                    { id: 6, name: '马拉松选手', description: '完成10局游戏', icon: 'fa-road', medal: 'bronze', points: 20, conditionType: 'games_played', conditionValue: 10 },
+                    { id: 7, name: '极速传说', description: '打字速度达到100 WPM', icon: 'fa-rocket', medal: 'gold', points: 100, conditionType: 'wpm', conditionValue: 100 },
+                    { id: 8, name: '完美主义', description: '准确率达到100%', icon: 'fa-star', medal: 'gold', points: 50, conditionType: 'accuracy', conditionValue: 100 },
+                    { id: 9, name: '单词达人', description: '累计完成500个单词', icon: 'fa-trophy', medal: 'silver', points: 40, conditionType: 'words_completed', conditionValue: 500 },
+                    { id: 10, name: '全能玩家', description: '在所有难度下都完成游戏', icon: 'fa-globe', medal: 'gold', points: 75, conditionType: 'all_difficulties', conditionValue: 1 }
+                ];
+
+                if (!localStorage.getItem(this.achievementsKey)) {
+                    localStorage.setItem(this.achievementsKey, JSON.stringify(defaultAchievements));
+                }
+            }
+
+            // 获取所有用户
+            getUsers() {
+                return JSON.parse(localStorage.getItem(this.usersKey)) || [];
+            }
+
+            // 保存用户数据
+            saveUsers(users) {
+                localStorage.setItem(this.usersKey, JSON.stringify(users));
+            }
+
+            // 获取当前用户
+            getCurrentUser() {
+                return JSON.parse(localStorage.getItem(this.currentUserKey));
+            }
+
+            // 设置当前用户
+            setCurrentUser(user) {
+                localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+            }
+
+            // 清除当前用户
+            clearCurrentUser() {
+                localStorage.removeItem(this.currentUserKey);
+            }
+
+            // 注册用户
+            register(userData) {
+                const users = this.getUsers();
+                
+                // 验证用户名格式
+                if (!/^[a-zA-Z0-9_]{3,20}$/.test(userData.username)) {
+                    return { success: false, message: '用户名格式不正确（3-20位字母、数字或下划线）' };
+                }
+
+                // 检查用户名是否已存在
+                if (users.find(user => user.username === userData.username)) {
+                    return { success: false, message: '用户名已存在' };
+                }
+
+                // 检查邮箱是否已存在
+                if (users.find(user => user.email === userData.email)) {
+                    return { success: false, message: '邮箱已被注册' };
+                }
+
+                // 验证密码长度
+                if (userData.password.length < 6) {
+                    return { success: false, message: '密码长度至少6个字符' };
+                }
+
+                // 创建新用户
+                const newUser = {
+                    id: Date.now().toString(),
+                    username: userData.username,
+                    email: userData.email,
+                    password: this.hashPassword(userData.password), // 简单哈希，实际项目中应该使用更安全的方法
+                    createdAt: new Date().toISOString(),
+                    stats: {
+                        points: 0,
+                        bestWPM: 0,
+                        bestAccuracy: 0,
+                        gamesPlayed: 0,
+                        totalWordsCompleted: 0,
+                        totalErrors: 0,
+                        totalTimePlayed: 0
+                    },
+                    settings: {
+                        soundEnabled: true,
+                        highlightEnabled: true,
+                        gameDuration: 120,
+                        soundVolume: 0.5
+                    },
+                    unlockedAchievements: [],
+                    gameHistory: [],
+                    difficultiesCompleted: []
+                };
+
+                users.push(newUser);
+                this.saveUsers(users);
+
+                // 播放注册成功音效
+                this.soundManager.play('correct');
+
+                return {
+                    success: true,
+                    message: '注册成功',
+                    user: this.getUserWithoutPassword(newUser)
+                };
+            }
+
+            // 登录用户
+            login(username, password) {
+                const users = this.getUsers();
+                const user = users.find(u => u.username === username);
+                
+                if (!user) {
+                    return { success: false, message: '用户名或密码错误' };
+                }
+
+                if (user.password !== this.hashPassword(password)) {
+                    return { success: false, message: '用户名或密码错误' };
+                }
+
+                this.setCurrentUser(this.getUserWithoutPassword(user));
+                
+                // 播放登录成功音效
+                this.soundManager.play('correct');
+                
+                return {
+                    success: true,
+                    message: '登录成功',
+                    user: this.getUserWithoutPassword(user)
+                };
+            }
+
+            // 更新用户数据
+            updateUser(updatedUser) {
+                const users = this.getUsers();
+                const index = users.findIndex(u => u.id === updatedUser.id);
+                
+                if (index !== -1) {
+                    // 保留密码字段
+                    updatedUser.password = users[index].password;
+                    users[index] = updatedUser;
+                    this.saveUsers(users);
+                    
+                    // 如果更新的是当前用户，也更新当前用户数据
+                    const currentUser = this.getCurrentUser();
+                    if (currentUser && currentUser.id === updatedUser.id) {
+                        this.setCurrentUser(this.getUserWithoutPassword(updatedUser));
+                    }
+                }
+            }
+
+            // 保存游戏记录
+            saveGameRecord(userId, gameData) {
+                const users = this.getUsers();
+                const user = users.find(u => u.id === userId);
+                
+                if (!user) return null;
+
+                const record = {
+                    id: Date.now().toString(),
+                    difficulty: gameData.difficulty,
+                    duration: gameData.duration,
+                    score: gameData.score,
+                    wpm: gameData.wpm,
+                    accuracy: gameData.accuracy,
+                    wordsCompleted: gameData.wordsCompleted,
+                    errors: gameData.errors,
+                    playedAt: new Date().toISOString()
+                };
+
+                // 更新用户统计
+                user.stats.points += gameData.score;
+                user.stats.bestWPM = Math.max(user.stats.bestWPM, gameData.wpm);
+                user.stats.bestAccuracy = Math.max(user.stats.bestAccuracy, gameData.accuracy);
+                user.stats.gamesPlayed += 1;
+                user.stats.totalWordsCompleted += gameData.wordsCompleted;
+                user.stats.totalErrors += gameData.errors;
+                user.stats.totalTimePlayed += gameData.duration;
+
+                // 记录完成的难度
+                if (!user.difficultiesCompleted.includes(gameData.difficulty)) {
+                    user.difficultiesCompleted.push(gameData.difficulty);
+                }
+
+                // 添加游戏记录
+                user.gameHistory.unshift(record);
+                if (user.gameHistory.length > 50) {
+                    user.gameHistory = user.gameHistory.slice(0, 50);
+                }
+
+                this.saveUsers(users);
+
+                // 检查成就解锁
+                const newAchievements = this.checkAchievements(user);
+                if (newAchievements.length > 0) {
+                    user.unlockedAchievements.push(...newAchievements.map(a => a.id));
+                    this.saveUsers(users);
+                    
+                    // 更新当前用户
+                    const currentUser = this.getCurrentUser();
+                    if (currentUser && currentUser.id === userId) {
+                        currentUser.unlockedAchievements.push(...newAchievements.map(a => a.id));
+                        currentUser.stats = user.stats;
+                        this.setCurrentUser(currentUser);
+                    }
+
+                    return newAchievements;
+                }
+
+                return [];
+            }
+
+            // 检查成就解锁
+            checkAchievements(user) {
+                const achievements = JSON.parse(localStorage.getItem(this.achievementsKey));
+                const newAchievements = [];
+
+                for (const achievement of achievements) {
+                    if (user.unlockedAchievements.includes(achievement.id)) {
+                        continue;
+                    }
+
+                    let unlocked = false;
+
+                    switch (achievement.conditionType) {
+                        case 'games_played':
+                            unlocked = user.stats.gamesPlayed >= achievement.conditionValue;
+                            break;
+                        case 'wpm':
+                            unlocked = user.stats.bestWPM >= achievement.conditionValue;
+                            break;
+                        case 'accuracy':
+                            unlocked = user.stats.bestAccuracy >= achievement.conditionValue;
+                            break;
+                        case 'words_completed':
+                            unlocked = user.stats.totalWordsCompleted >= achievement.conditionValue;
+                            break;
+                        case 'expert_completion':
+                            unlocked = user.difficultiesCompleted.includes('expert');
+                            break;
+                        case 'all_difficulties':
+                            unlocked = ['easy', 'medium', 'hard', 'expert'].every(diff => 
+                                user.difficultiesCompleted.includes(diff)
+                            );
+                            break;
+                    }
+
+                    if (unlocked) {
+                        newAchievements.push(achievement);
+                        // 添加成就点数
+                        user.stats.points += achievement.points;
+                    }
+                }
+
+                return newAchievements;
+            }
+
+            // 获取排行榜
+            getLeaderboard(limit = 10, sortBy = 'points') {
+                const users = this.getUsers();
+                const sortedUsers = users
+                    .map(user => this.getUserWithoutPassword(user))
+                    .sort((a, b) => b.stats[sortBy] - a.stats[sortBy])
+                    .slice(0, limit);
+
+                return sortedUsers;
+            }
+
+            // 获取所有成就
+            getAchievements() {
+                return JSON.parse(localStorage.getItem(this.achievementsKey));
+            }
+
+            // 辅助方法：移除密码字段
+            getUserWithoutPassword(user) {
+                const { password, ...userWithoutPassword } = user;
+                return userWithoutPassword;
+            }
+
+            // 简单密码哈希（实际项目中应该使用更安全的方法）
+            hashPassword(password) {
+                return btoa(password); // 注意：这只是一个简单的示例，不适用于生产环境
+            }
+
+            // 播放声音
+            playSound(soundName) {
+                this.soundManager.play(soundName);
+            }
+
+            // 设置声音音量
+            setSoundVolume(volume) {
+                this.soundManager.setVolume(volume);
+            }
+
+            // 启用/禁用声音
+            setSoundEnabled(enabled) {
+                this.soundManager.setEnabled(enabled);
+            }
+        }
+
+        // 创建全局用户管理器实例
+        const userManager = new UserManager();
+
+        // 英文句子库
+        const sentences = {
+            easy: [
+                "Hello world. This is a simple sentence.",
+                "I like to play football with my friends.",
+                "She reads books every evening before sleep.",
+                "We went to the park and had a great time.",
+                "The sun rises in the east and sets in the west.",
+                "Cats and dogs are common pets in many homes.",
+                "He studies hard to achieve good grades.",
+                "Water freezes at zero degrees Celsius.",
+                "My favorite color is blue.",
+                "I have a brother and a sister.",
+                "We should protect our environment.",
+                "Learning English is fun and useful.",
+                "Apples are rich in vitamins.",
+                "Birds can fly in the sky.",
+                "Summer is the hottest season of the year.",
+                "The sky is blue on a clear day.",
+                "I enjoy listening to music while working.",
+                "She has a beautiful smile.",
+                "They went to the beach last weekend.",
+                "Reading helps improve your vocabulary.",
+                "The moon shines at night.",
+                "Exercise is good for your health.",
+                "He drinks coffee every morning.",
+                "The baby is sleeping in the crib.",
+                "We need to buy some groceries.",
+                "She wears glasses to read books.",
+                "The train arrives at 3 PM.",
+                "They planted flowers in the garden.",
+                "I always brush my teeth before bed.",
+                "The teacher writes on the whiteboard."
+            ],
+            medium: [
+                "The quick brown fox jumps over the lazy dog.",
+                "Education is the key to unlocking the world.",
+                "Success usually comes to those who are too busy to be looking for it.",
+                "Life is what happens when you're busy making other plans.",
+                "The only way to do great work is to love what you do.",
+                "In three words I can sum up everything I've learned about life: it goes on.",
+                "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+                "The best revenge is massive success.",
+                "If you want to live a happy life, tie it to a goal, not to people or things.",
+                "A person who never made a mistake never tried anything new.",
+                "The future belongs to those who believe in the beauty of their dreams.",
+                "Strive not to be a success, but rather to be of value.",
+                "I have not failed. I've just found 10000 ways that won't work.",
+                "The only limit to our realization of tomorrow will be our doubts of today.",
+                "It does not matter how slowly you go as long as you do not stop.",
+                "The secret of getting ahead is getting started.",
+                "Don't watch the clock; do what it does. Keep going.",
+                "The only person you are destined to become is the person you decide to be.",
+                "Believe you can and you're halfway there.",
+                "Change your thoughts and you change your world.",
+                "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+                "Happiness is not something ready made. It comes from your own actions.",
+                "The best time to plant a tree was 20 years ago. The second best time is now.",
+                "You miss 100% of the shots you don't take.",
+                "Life is 10% what happens to you and 90% how you react to it.",
+                "The mind is everything. What you think you become.",
+                "Quality is not an act, it is a habit.",
+                "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.",
+                "The journey of a thousand miles begins with one step.",
+                "You must be the change you wish to see in the world."
+            ],
+            hard: [
+                "A journey of a thousand miles begins with a single step.",
+                "All that glitters is not gold, but at least it contains free electrons.",
+                "As human beings, our greatness lies not so much in being able to remake the world as in being able to remake ourselves.",
+                "Character cannot be developed in ease and quiet. Only through experience of trial and suffering can the soul be strengthened, ambition inspired, and success achieved.",
+                "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.",
+                "Education is not the filling of a pail, but the lighting of a fire.",
+                "For every minute you are angry you lose sixty seconds of happiness.",
+                "Genius is one percent inspiration and ninety-nine percent perspiration.",
+                "Great minds discuss ideas; average minds discuss events; small minds discuss people.",
+                "I find that the harder I work, the more luck I seem to have.",
+                "If you look at what you have in life, you'll always have more. If you look at what you don't have in life, you'll never have enough.",
+                "If you want your children to be intelligent, read them fairy tales. If you want them to be more intelligent, read them more fairy tales.",
+                "It is our choices, Harry, that show what we truly are, far more than our abilities.",
+                "Logic will get you from A to Z; imagination will get you everywhere.",
+                "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.",
+                "The difference between ordinary and extraordinary is that little extra.",
+                "The only thing necessary for the triumph of evil is for good men to do nothing.",
+                "Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.",
+                "We cannot solve our problems with the same thinking we used when we created them.",
+                "Whatever you can do, or dream you can, begin it. Boldness has genius, power, and magic in it.",
+                "You have power over your mind - not outside events. Realize this, and you will find strength.",
+                "Your time is limited, so don't waste it living someone else's life. Don't be trapped by dogma - which is living with the results of other people's thinking.",
+                "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+                "In the middle of difficulty lies opportunity.",
+                "Do not go where the path may lead, go instead where there is no path and leave a trail.",
+                "The only true wisdom is in knowing you know nothing.",
+                "That which does not kill us makes us stronger.",
+                "Be the change that you wish to see in the world.",
+                "Live as if you were to die tomorrow. Learn as if you were to live forever.",
+                "No act of kindness, no matter how small, is ever wasted."
+            ],
+            expert: [
+                "The dichotomy between the subjective and objective perspectives on consciousness presents a formidable challenge to contemporary philosophy of mind.",
+                "Quantum entanglement, a phenomenon where particles remain interconnected regardless of distance, challenges our classical understanding of locality and causality.",
+                "Epistemological skepticism questions the possibility of certain knowledge, positing that our cognitive faculties may be fundamentally unreliable.",
+                "The anthropic principle in cosmology suggests that the universe's physical constants appear fine-tuned for life because we exist to observe them.",
+                "Postmodern deconstruction seeks to expose the inherent contradictions and instabilities within seemingly coherent philosophical systems.",
+                "Metacognition, or thinking about thinking, involves executive processes that monitor and regulate cognitive activities during learning.",
+                "The Hard Problem of Consciousness concerns why and how physical processes in the brain give rise to subjective qualitative experiences.",
+                "Neuroplasticity demonstrates the brain's remarkable capacity to reorganize itself by forming new neural connections throughout life.",
+                "The correspondence theory of truth maintains that a proposition is true if it corresponds to reality, while coherence theory emphasizes internal consistency.",
+                "Existential phenomenology explores the structures of experience and consciousness from the first-person point of view.",
+                "The Turing Test, proposed by Alan Turing, evaluates a machine's ability to exhibit intelligent behavior indistinguishable from that of a human.",
+                "Moral particularism argues that ethical decisions cannot be captured by general principles but require context-sensitive judgment.",
+                "The simulation hypothesis posits that reality might be an artificial simulation, such as a computer simulation run by an advanced civilization.",
+                "Epigenetics studies heritable phenotype changes that do not involve alterations in the DNA sequence but rather modifications in gene expression.",
+                "The philosophical zombie thought experiment challenges physicalist accounts of consciousness by imagining beings physically identical to humans but lacking qualia.",
+                "String theory attempts to reconcile quantum mechanics and general relativity by positing that fundamental particles are one-dimensional vibrating strings.",
+                "Compatibilism seeks to reconcile free will with determinism by redefining freedom in terms of the absence of external constraints rather than metaphysical independence.",
+                "The extended mind thesis argues that cognitive processes extend beyond the brain to include aspects of the external environment.",
+                "Virtue epistemology focuses on intellectual virtues—traits like open-mindedness and intellectual courage—as central to knowledge acquisition.",
+                "The multiverse hypothesis suggests that our universe is but one of many universes that comprise all of physical reality.",
+                "Phenomenological reduction, or epoché, involves bracketing assumptions about the external world to focus on the structures of consciousness.",
+                "The mereological fallacy occurs when properties of the whole are erroneously attributed to its constituent parts, such as ascribing psychological predicates to brains.",
+                "Transcendental arguments attempt to establish necessary conditions for the possibility of experience, knowledge, or meaningful discourse.",
+                "The principle of sufficient reason asserts that everything must have a reason, cause, or ground for its existence or occurrence.",
+                "Eliminative materialism proposes that common-sense psychological concepts like belief and desire do not refer to anything real and should be eliminated.",
+                "The knowledge argument against physicalism uses thought experiments about color scientists to challenge reductive accounts of consciousness.",
+                "Modal realism defends the controversial view that possible worlds are just as real as the actual world, not merely abstract representations.",
+                "The sorites paradox highlights problems of vagueness by considering how many grains of sand make a heap when adding one grain at a time.",
+                "Teleosemantics attempts to naturalize mental representation by appealing to the biological functions of cognitive systems shaped by evolutionary history.",
+                "The problem of other minds questions how we can know that other beings have conscious experiences similar to our own."
+            ]
+        };
+
+        // 游戏状态
+        let gameState = {
+            isPlaying: false,
+            isPaused: false,
+            currentSentence: '',
+            typedSentence: '',
+            startTime: null,
+            timer: null,
+            timeLeft: 120,
+            score: 0,
+            wpm: 0,
+            accuracy: 0,
+            wordsCompleted: 0,
+            errors: 0,
+            currentDifficulty: 'medium',
+            correctChars: 0,
+            totalChars: 0
+        };
+
+        // 当前用户
+        let currentUser = null;
+
+        // DOM元素
+        const typingInput = document.getElementById('typing-input');
+        const sentenceElement = document.getElementById('sentence');
+        const timerElement = document.getElementById('timer');
+        const scoreElement = document.getElementById('score');
+        const wpmElement = document.getElementById('wpm');
+        const accuracyElement = document.getElementById('accuracy');
+        const wordsCompletedElement = document.getElementById('words-completed');
+        const errorsElement = document.getElementById('errors');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const difficultySelect = document.getElementById('difficulty');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const modalContent = document.getElementById('modal-content');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const shareBtn = document.getElementById('share-btn');
+        const finalScoreElement = document.getElementById('final-score');
+        const finalWpmElement = document.getElementById('final-wpm');
+        const finalAccuracyElement = document.getElementById('final-accuracy');
+        const finalWordsElement = document.getElementById('final-words');
+        const achievementNotification = document.getElementById('achievement-notification');
+        const achievementText = document.getElementById('achievement-text');
+        const achievementPoints = document.getElementById('achievement-points');
+
+        // 初始化应用
+        function initializeApp() {
+            // 检查登录状态
+            checkAuthStatus();
+            
+            // 初始化事件监听器
+            initializeGameEventListeners();
+            initializeNavigationEventListeners();
+            initializeModalEventListeners();
+            initializeUIEventListeners();
+        }
+
+        // 检查登录状态
+        function checkAuthStatus() {
+            const user = userManager.getCurrentUser();
+            if (user) {
+                currentUser = user;
+                updateUIForLoggedInUser(user);
+                // 应用用户声音设置
+                if (user.settings) {
+                    userManager.setSoundEnabled(user.settings.soundEnabled);
+                    if (user.settings.soundVolume !== undefined) {
+                        userManager.setSoundVolume(user.settings.soundVolume);
+                    }
+                }
+            }
+        }
+
+        // 初始化游戏事件监听器
+        function initializeGameEventListeners() {
+            startBtn.addEventListener('click', startGame);
+            pauseBtn.addEventListener('click', togglePause);
+            typingInput.addEventListener('input', handleTyping);
+            difficultySelect.addEventListener('change', function() {
+                gameState.currentDifficulty = this.value;
+            });
+            playAgainBtn.addEventListener('click', function() {
+                hideGameOverModal();
+                showPage('home-page');
+            });
+            
+            // 分享按钮
+            shareBtn.addEventListener('click', shareResults);
+        }
+
+        // 初始化导航事件监听器
+        function initializeNavigationEventListeners() {
+            // 桌面端导航
+            document.getElementById('home-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('home-page');
+            });
+            
+            document.getElementById('practice-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('practice-page');
+                loadPracticePage();
+            });
+            
+            document.getElementById('achievements-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('achievements-page');
+                loadAchievementsPage();
+            });
+            
+            document.getElementById('leaderboard-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('leaderboard-page');
+                loadLeaderboardPage();
+            });
+            
+            document.getElementById('settings-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('settings-page');
+                loadSettingsPage();
+            });
+            
+            // 移动端导航
+            document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+            
+            document.querySelector('.home-mobile-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('home-page');
+                hideMobileMenu();
+            });
+            
+            document.querySelector('.practice-mobile-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('practice-page');
+                loadPracticePage();
+                hideMobileMenu();
+            });
+            
+            document.querySelector('.achievements-mobile-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('achievements-page');
+                loadAchievementsPage();
+                hideMobileMenu();
+            });
+            
+            document.querySelector('.leaderboard-mobile-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('leaderboard-page');
+                loadLeaderboardPage();
+                hideMobileMenu();
+            });
+            
+            document.querySelector('.settings-mobile-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage('settings-page');
+                loadSettingsPage();
+                hideMobileMenu();
+            });
+            
+            // 移动端登录按钮
+            document.querySelector('#mobile-login-section button').addEventListener('click', function() {
+                showAuthModal();
+                hideMobileMenu();
+            });
+            
+            // 移动端退出按钮
+            document.getElementById('mobile-logout-btn').addEventListener('click', function() {
+                logout();
+                hideMobileMenu();
+            });
+        }
+
+        // 初始化模态框事件监听器
+        function initializeModalEventListeners() {
+            // 登录按钮
+            document.getElementById('login-btn').addEventListener('click', showAuthModal);
+            
+            // 退出按钮
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // 移动端退出按钮
+            document.getElementById('mobile-logout-btn').addEventListener('click', logout);
+            
+            // 关闭模态框按钮
+            document.getElementById('close-auth-modal').addEventListener('click', hideAuthModal);
+            
+            // 登录/注册标签切换
+            document.getElementById('login-tab').addEventListener('click', function() {
+                showLoginForm();
+            });
+            
+            document.getElementById('register-tab').addEventListener('click', function() {
+                showRegisterForm();
+            });
+            
+            // 表单提交
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+            
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleRegister();
+            });
+            
+            // 点击模态框外部关闭
+            document.getElementById('auth-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideAuthModal();
+                }
+            });
+            
+            document.getElementById('game-over-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideGameOverModal();
+                }
+            });
+        }
+
+        // 初始化UI事件监听器
+        function initializeUIEventListeners() {
+            // 添加键盘快捷键
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+Enter 开始/暂停游戏
+                if (e.ctrlKey && e.key === 'Enter') {
+                    if (gameState.isPlaying) {
+                        togglePause();
+                    } else {
+                        startGame();
+                    }
+                }
+                // ESC 暂停游戏
+                if (e.key === 'Escape' && gameState.isPlaying) {
+                    togglePause();
+                }
+                // Alt+L 打开登录框
+                if (e.altKey && e.key.toLowerCase() === 'l') {
+                    showAuthModal();
+                }
+                // Alt+H 返回主页
+                if (e.altKey && e.key.toLowerCase() === 'h') {
+                    showPage('home-page');
+                }
+                // Alt+P 打开练习模式
+                if (e.altKey && e.key.toLowerCase() === 'p') {
+                    showPage('practice-page');
+                    loadPracticePage();
+                }
+                // Alt+A 打开成就页面
+                if (e.altKey && e.key.toLowerCase() === 'a') {
+                    showPage('achievements-page');
+                    loadAchievementsPage();
+                }
+                // Alt+B 打开排行榜页面
+                if (e.altKey && e.key.toLowerCase() === 'b') {
+                    showPage('leaderboard-page');
+                    loadLeaderboardPage();
+                }
+                // Alt+S 打开设置页面
+                if (e.altKey && e.key.toLowerCase() === 's') {
+                    showPage('settings-page');
+                    loadSettingsPage();
+                }
+            });
+        }
+
+        // 显示页面
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('practice-page').classList.add('hidden');
+            document.getElementById('achievements-page').classList.add('hidden');
+            document.getElementById('leaderboard-page').classList.add('hidden');
+            document.getElementById('settings-page').classList.add('hidden');
+            
+            // 显示目标页面
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        // 切换移动端菜单
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+
+        // 隐藏移动端菜单
+        function hideMobileMenu() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // 显示认证模态框
+        function showAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            const modalContent = document.getElementById('auth-modal-content');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 10);
+            
+            // 默认显示登录表单
+            showLoginForm();
+        }
+
+        // 隐藏认证模态框
+        function hideAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            const modalContent = document.getElementById('auth-modal-content');
+            
+            modalContent.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+            
+            // 清除表单和消息
+            document.getElementById('login-form').reset();
+            document.getElementById('register-form').reset();
+            hideAuthMessage();
+        }
+
+        // 显示登录表单
+        function showLoginForm() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-tab').classList.add('text-primary', 'border-primary');
+            document.getElementById('login-tab').classList.remove('text-gray-500');
+            document.getElementById('register-tab').classList.add('text-gray-500');
+            document.getElementById('register-tab').classList.remove('text-primary', 'border-primary');
+            document.getElementById('auth-modal-title').textContent = '登录';
+            hideAuthMessage();
+        }
+
+        // 显示注册表单
+        function showRegisterForm() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('register-tab').classList.add('text-primary', 'border-primary');
+            document.getElementById('register-tab').classList.remove('text-gray-500');
+            document.getElementById('login-tab').classList.add('text-gray-500');
+            document.getElementById('login-tab').classList.remove('text-primary', 'border-primary');
+            document.getElementById('auth-modal-title').textContent = '注册';
+            hideAuthMessage();
+        }
+
+        // 显示认证消息
+        function showAuthMessage(message, isSuccess = false) {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.textContent = message;
+            messageEl.classList.remove('hidden');
+            
+            if (isSuccess) {
+                messageEl.classList.remove('bg-red-100', 'text-red-700', 'border-red-300');
+                messageEl.classList.add('bg-green-100', 'text-green-700', 'border-green-300');
+            } else {
+                messageEl.classList.remove('bg-green-100', 'text-green-700', 'border-green-300');
+                messageEl.classList.add('bg-red-100', 'text-red-700', 'border-red-300');
+            }
+        }
+
+        // 隐藏认证消息
+        function hideAuthMessage() {
+            document.getElementById('auth-message').classList.add('hidden');
+        }
+
+        // 处理登录
+        function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            const result = userManager.login(username, password);
+            
+            if (result.success) {
+                showAuthMessage('登录成功！', true);
+                currentUser = result.user;
+                setTimeout(() => {
+                    hideAuthModal();
+                    updateUIForLoggedInUser(result.user);
+                }, 1000);
+            } else {
+                showAuthMessage(result.message, false);
+            }
+        }
+
+        // 处理注册
+        function handleRegister() {
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // 验证密码确认
+            if (password !== confirmPassword) {
+                showAuthMessage('两次输入的密码不一致', false);
+                return;
+            }
+            
+            const result = userManager.register({ username, email, password });
+            
+            if (result.success) {
+                showAuthMessage('注册成功！请登录', true);
+                setTimeout(() => {
+                    showLoginForm();
+                    document.getElementById('login-username').value = username;
+                }, 1500);
+            } else {
+                showAuthMessage(result.message, false);
+            }
+        }
+
+        // 登出
+        function logout() {
+            userManager.clearCurrentUser();
+            currentUser = null;
+            updateUIForLoggedOutUser();
+        }
+
+        // 更新UI为已登录状态
+        function updateUIForLoggedInUser(user) {
+            // 更新桌面端UI
+            document.getElementById('user-info').classList.remove('hidden');
+            document.getElementById('login-btn').classList.add('hidden');
+            document.getElementById('username-display').textContent = user.username;
+            document.getElementById('user-points').classList.remove('hidden');
+            document.getElementById('user-points').querySelector('span').textContent = user.stats.points;
+            
+            // 更新移动端UI
+            document.getElementById('mobile-user-info').classList.remove('hidden');
+            document.getElementById('mobile-login-section').classList.add('hidden');
+            document.getElementById('mobile-username').textContent = user.username;
+            document.getElementById('mobile-points').textContent = user.stats.points;
+        }
+
+        // 更新UI为未登录状态
+        function updateUIForLoggedOutUser() {
+            // 更新桌面端UI
+            document.getElementById('user-info').classList.add('hidden');
+            document.getElementById('login-btn').classList.remove('hidden');
+            document.getElementById('user-points').classList.add('hidden');
+            
+            // 更新移动端UI
+            document.getElementById('mobile-user-info').classList.add('hidden');
+            document.getElementById('mobile-login-section').classList.remove('hidden');
+        }
+
+        // 开始游戏
+        function startGame() {
+            if (!currentUser) {
+                showAuthModal();
+                return;
+            }
+            
+            if (gameState.isPlaying) {
+                // 重新开始游戏
+                resetGameState();
+            }
+            
+            gameState.isPlaying = true;
+            gameState.isPaused = false;
+            gameState.timeLeft = 120;
+            gameState.score = 0;
+            gameState.wpm = 0;
+            gameState.accuracy = 0;
+            gameState.wordsCompleted = 0;
+            gameState.errors = 0;
+            gameState.typedSentence = '';
+            gameState.correctChars = 0;
+            gameState.totalChars = 0;
+            
+            // 更新UI
+            startBtn.innerHTML = '<i class="fa fa-refresh mr-2"></i> 重新开始';
+            pauseBtn.classList.remove('hidden');
+            typingInput.disabled = false;
+            typingInput.value = '';
+            typingInput.focus();
+            
+            // 选择句子
+            selectRandomSentence();
+            
+            // 开始计时器
+            startTimer();
+            
+            // 更新统计显示
+            updateStatsDisplay();
+            
+            // 播放游戏开始音效
+            userManager.playSound('gameStart');
+        }
+
+        // 选择随机句子
+        function selectRandomSentence() {
+            const difficulty = gameState.currentDifficulty;
+            const sentenceArray = sentences[difficulty];
+            const randomIndex = Math.floor(Math.random() * sentenceArray.length);
+            gameState.currentSentence = sentenceArray[randomIndex];
+            
+            // 更新UI
+            updateSentenceDisplay();
+        }
+
+        // 开始计时器
+        function startTimer() {
+            gameState.startTime = Date.now();
+            
+            gameState.timer = setInterval(() => {
+                if (!gameState.isPaused) {
+                    gameState.timeLeft--;
+                    timerElement.textContent = `${gameState.timeLeft}sec`;
+                    
+                    // 计算实时WPM
+                    calculateStats();
+                    updateStatsDisplay();
+                    
+                    if (gameState.timeLeft <= 0) {
+                        endGame();
+                    }
+                }
+            }, 1000);
+        }
+
+        // 处理输入
+        function handleTyping(e) {
+            if (!gameState.isPlaying || gameState.isPaused) return;
+            
+            const newTypedSentence = e.target.value;
+            const oldTypedSentence = gameState.typedSentence;
+            gameState.typedSentence = newTypedSentence;
+            gameState.totalChars++;
+            
+            // 播放打字音效
+            if (newTypedSentence.length > oldTypedSentence.length) {
+                userManager.playSound('typing');
+            }
+            
+            // 计算正确字符数
+            const currentIndex = gameState.typedSentence.length - 1;
+            if (currentIndex >= 0) {
+                if (gameState.typedSentence[currentIndex] === gameState.currentSentence[currentIndex]) {
+                    gameState.correctChars++;
+                    // 播放正确音效（只在正确时播放）
+                    if (newTypedSentence.length > oldTypedSentence.length) {
+                        userManager.playSound('correct');
+                    }
+                } else {
+                    // 播放错误音效
+                    userManager.playSound('error');
+                }
+            }
+            
+            // 计算打字速度和准确率
+            calculateStats();
+            
+            // 更新UI
+            updateStatsDisplay();
+            updateSentenceDisplay();
+            
+            // 检查是否完成句子
+            if (gameState.typedSentence === gameState.currentSentence) {
+                completeSentence();
+            }
+        }
+
+        // 计算统计信息
+        function calculateStats() {
+            const elapsedTime = (Date.now() - gameState.startTime) / 1000 / 60; // 分钟
+            const typedWords = gameState.typedSentence.trim().split(/\s+/).length;
+            
+            // 计算WPM (Words Per Minute)
+            gameState.wpm = elapsedTime > 0 ? Math.round(typedWords / elapsedTime) : 0;
+            
+            // 计算准确率
+            gameState.accuracy = gameState.totalChars > 0 ? 
+                Math.round((gameState.correctChars / gameState.totalChars) * 100) : 0;
+            
+            // 计算错误数
+            gameState.errors = gameState.totalChars - gameState.correctChars;
+            
+            // 计算分数
+            const difficultyMultipliers = {
+                easy: 1,
+                medium: 1.5,
+                hard: 2,
+                expert: 3
+            };
+            
+            const multiplier = difficultyMultipliers[gameState.currentDifficulty] || 1;
+            gameState.score = Math.round(gameState.wpm * (gameState.accuracy / 100) * multiplier);
+        }
+
+        // 更新统计显示
+        function updateStatsDisplay() {
+            scoreElement.textContent = gameState.score;
+            wpmElement.textContent = `${gameState.wpm} WPM`;
+            accuracyElement.textContent = `${gameState.accuracy}%`;
+            wordsCompletedElement.textContent = gameState.wordsCompleted;
+            errorsElement.textContent = gameState.errors;
+        }
+
+        // 更新句子显示
+        function updateSentenceDisplay() {
+            let html = '';
+            const chars = gameState.currentSentence.split('');
+            
+            for (let i = 0; i < chars.length; i++) {
+                if (i < gameState.typedSentence.length) {
+                    if (gameState.typedSentence[i] === chars[i]) {
+                        html += `<span class="char-correct">${chars[i]}</span>`;
+                    } else {
+                        html += `<span class="char-incorrect">${chars[i]}</span>`;
+                    }
+                } else if (i === gameState.typedSentence.length) {
+                    html += `<span class="typing-active">${chars[i]}</span>`;
+                } else {
+                    html += chars[i];
+                }
+            }
+            
+            sentenceElement.innerHTML = html;
+        }
+
+        // 完成句子
+        function completeSentence() {
+            const wordsInSentence = gameState.currentSentence.trim().split(/\s+/).length;
+            gameState.wordsCompleted += wordsInSentence;
+            
+            // 播放完成音效
+            userManager.playSound('complete');
+            
+            // 短暂延迟后选择新句子
+            setTimeout(() => {
+                selectRandomSentence();
+                typingInput.value = '';
+                gameState.typedSentence = '';
+                updateSentenceDisplay();
+            }, 500);
+        }
+
+        // 切换暂停状态
+        function togglePause() {
+            if (!gameState.isPlaying) return;
+            
+            gameState.isPaused = !gameState.isPaused;
+            
+            if (gameState.isPaused) {
+                pauseBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 继续';
+                typingInput.disabled = true;
+                // 播放暂停音效
+                userManager.playSound('error');
+            } else {
+                pauseBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停';
+                typingInput.disabled = false;
+                typingInput.focus();
+                // 播放继续音效
+                userManager.playSound('correct');
+            }
+        }
+
+        // 结束游戏
+        function endGame() {
+            gameState.isPlaying = false;
+            clearInterval(gameState.timer);
+            
+            // 更新UI
+            startBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始游戏';
+            pauseBtn.classList.add('hidden');
+            typingInput.disabled = true;
+            
+            // 显示游戏结束模态框
+            showGameOverModal();
+            
+            // 保存游戏结果
+            saveGameResults();
+            
+            // 播放游戏结束音效
+            userManager.playSound('gameOver');
+        }
+
+        // 显示游戏结束模态框
+        function showGameOverModal() {
+            const modal = document.getElementById('game-over-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            // 更新最终成绩
+            finalScoreElement.textContent = gameState.score;
+            finalWpmElement.textContent = `${gameState.wpm} WPM`;
+            finalAccuracyElement.textContent = `${gameState.accuracy}%`;
+            finalWordsElement.textContent = gameState.wordsCompleted;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        // 隐藏游戏结束模态框
+        function hideGameOverModal() {
+            const modal = document.getElementById('game-over-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            modalContent.style.opacity = '0';
+            modalContent.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // 保存游戏结果
+        function saveGameResults() {
+            if (!currentUser) return;
+            
+            const gameData = {
+                difficulty: gameState.currentDifficulty,
+                duration: 120 - gameState.timeLeft,
+                score: gameState.score,
+                wpm: gameState.wpm,
+                accuracy: gameState.accuracy,
+                wordsCompleted: gameState.wordsCompleted,
+                errors: gameState.errors
+            };
+            
+            const newAchievements = userManager.saveGameRecord(currentUser.id, gameData);
+            
+            // 更新本地用户数据
+            currentUser = userManager.getCurrentUser();
+            updateUIForLoggedInUser(currentUser);
+            
+            // 显示新解锁的成就
+            if (newAchievements && newAchievements.length > 0) {
+                showAchievementNotification(newAchievements[0]);
+            }
+        }
+
+        // 显示成就通知
+        function showAchievementNotification(achievement) {
+            achievementText.textContent = `解锁成就: ${achievement.name}`;
+            achievementPoints.textContent = `+${achievement.points}积分`;
+            achievementNotification.classList.remove('hidden');
+            
+            // 播放成就解锁音效
+            userManager.playSound('achievement');
+            
+            setTimeout(() => {
+                achievementNotification.classList.add('hidden');
+            }, 5000);
+        }
+
+        // 分享成绩
+        function shareResults() {
+            const text = `我在TypingEnglish打字游戏中获得了 ${gameState.score} 分，打字速度 ${gameState.wpm} WPM，正确率 ${gameState.accuracy}%！`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'TypingEnglish 成绩分享',
+                    text: text,
+                    url: window.location.href
+                });
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('成绩已复制到剪贴板！');
+                });
+            } else {
+                alert(text);
+            }
+        }
+
+        // 重置游戏状态
+        function resetGameState() {
+            gameState.isPlaying = false;
+            gameState.isPaused = false;
+            gameState.currentSentence = '';
+            gameState.typedSentence = '';
+            gameState.startTime = null;
+            gameState.timeLeft = 120;
+            gameState.score = 0;
+            gameState.wpm = 0;
+            gameState.accuracy = 0;
+            gameState.wordsCompleted = 0;
+            gameState.errors = 0;
+            gameState.correctChars = 0;
+            gameState.totalChars = 0;
+            
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            
+            // 更新UI
+            timerElement.textContent = '120sec';
+            scoreElement.textContent = '0';
+            wpmElement.textContent = '0 WPM';
+            accuracyElement.textContent = '0%';
+            wordsCompletedElement.textContent = '0';
+            errorsElement.textContent = '0';
+            typingInput.value = '';
+            sentenceElement.textContent = '准备好了吗?点击开始按钮,然后输入显示的英文句子.';
+        }
+
+        // 练习模式页面初始化
+        function loadPracticePage() {
+            const practicePage = document.getElementById('practice-page');
+            
+            // 清空内容
+            practicePage.innerHTML = '';
+            
+            // 创建内容容器
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'bg-white rounded-2xl shadow-xl overflow-hidden';
+            contentDiv.innerHTML = `
+                <div class="bg-primary text-white p-6">
+                    <h2 class="text-2xl font-bold">练习模式</h2>
+                    <p class="opacity-90">专注于特定类型的练习</p>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                    <i class="fa fa-keyboard-o text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">基础打字</h3>
+                                    <p class="text-gray-600 text-sm">练习基本键位</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+                                    <i class="fa fa-globe text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">英文文章</h3>
+                                    <p class="text-gray-600 text-sm">练习完整文章输入</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-danger/10 flex items-center justify-center text-danger">
+                                    <i class="fa fa-code text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">代码练习</h3>
+                                    <p class="text-gray-600 text-sm">练习编程代码输入</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-full bg-neutral/10 flex items-center justify-center text-neutral">
+                                    <i class="fa fa-trophy text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">挑战模式</h3>
+                                    <p class="text-gray-600 text-sm">限时挑战</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-4">自定义练习</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="custom-text" class="block text-sm font-medium text-gray-700 mb-1">练习文本</label>
+                                <textarea id="custom-text" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary" rows="4" placeholder="输入自定义练习内容..."></textarea>
+                            </div>
+                            <button id="start-custom-practice" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200">
+                                开始练习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 添加到页面
+            practicePage.appendChild(contentDiv);
+            
+            // 绑定自定义练习事件
+            document.getElementById('start-custom-practice').addEventListener('click', () => {
+                const textarea = document.getElementById('custom-text');
+                const customText = textarea.value.trim();
+                
+                if (customText) {
+                    // 切换到主页
+                    document.getElementById('home-page').classList.remove('hidden');
+                    practicePage.classList.add('hidden');
+                    
+                    // 重置游戏状态
+                    resetGameState();
+                    
+                    // 设置自定义文本
+                    gameState.currentSentence = customText;
+                    
+                    // 开始游戏
+                    typingInput.disabled = false;
+                    typingInput.focus();
+                    startBtn.innerHTML = '<i class="fa fa-refresh mr-2"></i> 重新开始';
+                    startBtn.classList.remove('bg-secondary');
+                    startBtn.classList.add('bg-primary');
+                    pauseBtn.classList.add('hidden');
+                    
+                    // 修改计时器显示
+                    timerElement.textContent = "无时间限制";
+                    
+                    // 显示句子
+                    sentenceElement.textContent = customText;
+                    
+                    // 设置游戏状态
+                    gameState.startTime = new Date();
+                    gameState.isPlaying = true;
+                    gameState.isPaused = false;
+                    
+                    // 播放游戏开始音效
+                    userManager.playSound('gameStart');
+                } else {
+                    alert('请输入练习文本');
+                }
+            });
+        }
+
+        // 加载成就页面
+        function loadAchievementsPage() {
+            const achievementsPage = document.getElementById('achievements-page');
+            
+            if (!currentUser) {
+                achievementsPage.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+                        <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa fa-lock text-gray-400 text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-neutral mb-4">请先登录</h2>
+                        <p class="text-gray-600 mb-6">登录后查看您的成就和进度</p>
+                        <button class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200" id="login-from-achievements">
+                            立即登录
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('login-from-achievements').addEventListener('click', showAuthModal);
+                return;
+            }
+            
+            const achievements = userManager.getAchievements();
+            
+            let achievementsHTML = '';
+            
+            achievements.forEach(achievement => {
+                const isUnlocked = currentUser.unlockedAchievements.includes(achievement.id);
+                const achievementClass = isUnlocked ? 'achievement-unlocked' : 'achievement-locked';
+                const medalClass = isUnlocked ? `medal-${achievement.medal}` : 'text-gray-400';
+                
+                achievementsHTML += `
+                    <div class="achievement-card ${achievementClass}">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mr-4">
+                                <i class="fa ${achievement.icon} text-2xl ${medalClass}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold ${isUnlocked ? 'text-neutral' : 'text-gray-500'}">${achievement.name}</h3>
+                                <p class="text-sm ${isUnlocked ? 'text-gray-600' : 'text-gray-400'}">${achievement.description}</p>
+                                <div class="mt-2 flex justify-between items-center">
+                                    <span class="text-xs px-2 py-1 rounded-full ${isUnlocked ? 'bg-primary/20 text-primary' : 'bg-gray-200 text-gray-500'}">
+                                        ${isUnlocked ? '已解锁' : '未解锁'}
+                                    </span>
+                                    <span class="text-sm font-medium ${isUnlocked ? medalClass : 'text-gray-400'}">
+                                        <i class="fa fa-star mr-1"></i>${achievement.points}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const unlockedCount = currentUser.unlockedAchievements.length;
+            const totalCount = achievements.length;
+            const progress = Math.round((unlockedCount / totalCount) * 100);
+            
+            achievementsPage.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="bg-primary text-white p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-2xl font-bold">成就系统</h2>
+                                <p class="opacity-90">完成挑战,解锁成就</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold">${unlockedCount}/${totalCount}</div>
+                                <div class="text-sm opacity-80">成就进度</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center bg-primary/10 px-4 py-2 rounded-lg">
+                                <i class="fa fa-star text-yellow-500 mr-2"></i>
+                                <span class="font-medium">${currentUser.stats.points}</span>
+                                <span class="ml-1">积分</span>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                进度: ${progress}%
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${achievementsHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 加载排行榜页面
+        function loadLeaderboardPage() {
+            const leaderboardPage = document.getElementById('leaderboard-page');
+            
+            const leaderboard = userManager.getLeaderboard(10, 'points');
+            
+            let leaderboardHTML = '';
+            
+            leaderboard.forEach((user, index) => {
+                let medalClass = '';
+                let medalIcon = '';
+                
+                if (index === 0) {
+                    medalClass = 'medal-gold';
+                    medalIcon = '<i class="fa fa-trophy mr-1"></i>';
+                } else if (index === 1) {
+                    medalClass = 'medal-silver';
+                    medalIcon = '<i class="fa fa-trophy mr-1"></i>';
+                } else if (index === 2) {
+                    medalClass = 'medal-bronze';
+                    medalIcon = '<i class="fa fa-trophy mr-1"></i>';
+                }
+                
+                leaderboardHTML += `
+                    <div class="flex items-center py-4 px-6 bg-white rounded-lg shadow-sm border border-gray-100">
+                        <div class="w-8 text-center font-bold ${medalClass}">
+                            ${medalIcon}${index + 1}
+                        </div>
+                        <div class="flex-1 ml-4">
+                            <div class="font-medium">${user.username}</div>
+                            <div class="text-sm text-gray-500">最佳速度: ${user.stats.bestWPM} WPM | 准确率: ${user.stats.bestAccuracy}%</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-primary">${user.stats.points}</div>
+                            <div class="text-sm text-gray-500">积分</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (leaderboard.length === 0) {
+                leaderboardHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa fa-users text-gray-400 text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-neutral mb-2">暂无排行榜数据</h3>
+                        <p class="text-gray-600">成为第一个登榜的用户！</p>
+                    </div>
+                `;
+            }
+            
+            leaderboardPage.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="bg-primary text-white p-6">
+                        <h2 class="text-2xl font-bold">排行榜</h2>
+                        <p class="mt-2 opacity-90">看看谁是最快的打字高手</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 gap-4">
+                            ${leaderboardHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 加载设置页面
+        function loadSettingsPage() {
+            const settingsPage = document.getElementById('settings-page');
+            
+            if (!currentUser) {
+                settingsPage.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+                        <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa fa-lock text-gray-400 text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-neutral mb-4">请先登录</h2>
+                        <p class="text-gray-600 mb-6">登录后访问设置页面</p>
+                        <button class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200" id="login-from-settings">
+                            立即登录
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('login-from-settings').addEventListener('click', showAuthModal);
+                return;
+            }
+            
+            const userSettings = currentUser.settings || {};
+            
+            settingsPage.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="bg-primary text-white p-6">
+                        <h2 class="text-2xl font-bold">设置</h2>
+                        <p class="mt-2 opacity-90">个性化你的打字体验</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-neutral mb-4">游戏设置</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">游戏时长</div>
+                                            <div class="text-sm text-gray-500">每局游戏的持续时间</div>
+                                        </div>
+                                        <select id="game-duration" class="bg-gray-100 border-0 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:bg-white">
+                                            <option value="60" ${userSettings.gameDuration === 60 ? 'selected' : ''}>60秒</option>
+                                            <option value="120" ${userSettings.gameDuration === 120 ? 'selected' : ''}>120秒</option>
+                                            <option value="180" ${userSettings.gameDuration === 180 ? 'selected' : ''}>180秒</option>
+                                            <option value="300" ${userSettings.gameDuration === 300 ? 'selected' : ''}>300秒</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">声音效果</div>
+                                            <div class="text-sm text-gray-500">开启或关闭打字音效</div>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="sound-enabled" class="sr-only peer" ${userSettings.soundEnabled ? 'checked' : ''}>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">音量大小</div>
+                                            <div class="text-sm text-gray-500">调整音效音量</div>
+                                        </div>
+                                        <input type="range" id="sound-volume" min="0" max="100" value="${(userSettings.soundVolume || 0.5) * 100}" class="w-32 accent-primary">
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">显示实时统计</div>
+                                            <div class="text-sm text-gray-500">在游戏中显示实时速度和准确率</div>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="highlight-enabled" class="sr-only peer" ${userSettings.highlightEnabled ? 'checked' : ''}>
+                                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-lg font-bold text-neutral mb-4">账户设置</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">用户名</div>
+                                            <div class="text-sm text-gray-500">${currentUser.username}</div>
+                                        </div>
+                                        <button class="px-4 py-2 bg-gray-200 text-neutral rounded-lg hover:bg-gray-300 transition-all duration-200" disabled>
+                                            暂不支持更改
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">邮箱</div>
+                                            <div class="text-sm text-gray-500">${currentUser.email}</div>
+                                        </div>
+                                        <button class="px-4 py-2 bg-gray-200 text-neutral rounded-lg hover:bg-gray-300 transition-all duration-200" disabled>
+                                            暂不支持更改
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium">密码</div>
+                                            <div class="text-sm text-gray-500">********</div>
+                                        </div>
+                                        <button class="px-4 py-2 bg-gray-200 text-neutral rounded-lg hover:bg-gray-300 transition-all duration-200" disabled>
+                                            暂不支持更改
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-gray-200">
+                                <button class="px-6 py-3 bg-danger text-white rounded-lg hover:bg-danger/90 transition-all duration-200 w-full" id="logout-from-settings">
+                                    退出登录
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 绑定设置事件
+            document.getElementById('sound-enabled').addEventListener('change', function() {
+                updateUserSetting('soundEnabled', this.checked);
+                userManager.setSoundEnabled(this.checked);
+                // 测试音效
+                if (this.checked) {
+                    userManager.playSound('correct');
+                }
+            });
+            
+            document.getElementById('sound-volume').addEventListener('input', function() {
+                const volume = this.value / 100;
+                updateUserSetting('soundVolume', volume);
+                userManager.setSoundVolume(volume);
+                // 测试音效
+                userManager.playSound('typing');
+            });
+            
+            document.getElementById('highlight-enabled').addEventListener('change', function() {
+                updateUserSetting('highlightEnabled', this.checked);
+            });
+            
+            document.getElementById('game-duration').addEventListener('change', function() {
+                updateUserSetting('gameDuration', parseInt(this.value));
+            });
+            
+            document.getElementById('logout-from-settings').addEventListener('click', logout);
+        }
+
+        // 更新用户设置
+        function updateUserSetting(key, value) {
+            if (!currentUser) return;
+            
+            currentUser.settings[key] = value;
+            userManager.updateUser(currentUser);
+        }
+
+        // 启动应用
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
