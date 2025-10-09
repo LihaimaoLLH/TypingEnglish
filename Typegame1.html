@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>打字练习 - TypingEnglish</title>
+    <!-- 网页标签图标 -->
+    <link rel="icon" type="image/gif" href="https://github.githubassets.com/images/spinners/octocat-spinner-128.gif">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -267,11 +269,11 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">快速链接</h3>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-primary transition-colors duration-200">主页</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors duration-200">练习模式</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors duration-200">成就</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors duration-200">排行榜</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors duration-200">设置</a></li>
+                        <li><a href="#" id="footer-home-link" class="hover:text-primary transition-colors duration-200">主页</a></li>
+                        <li><a href="#" id="footer-practice-link" class="hover:text-primary transition-colors duration-200">练习模式</a></li>
+                        <li><a href="#" id="footer-achievements-link" class="hover:text-primary transition-colors duration-200">成就</a></li>
+                        <li><a href="#" id="footer-leaderboard-link" class="hover:text-primary transition-colors duration-200">排行榜</a></li>
+                        <li><a href="#" id="footer-settings-link" class="hover:text-primary transition-colors duration-200">设置</a></li>
                     </ul>
                 </div>
                 <div>
@@ -2381,6 +2383,31 @@
 
         // 启动应用
         document.addEventListener('DOMContentLoaded', initializeApp);
+    // 页脚快速链接导航
+    document.getElementById('footer-home-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage('home-page');
+    });
+    document.getElementById('footer-practice-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage('practice-page');
+        loadPracticePage();
+    });
+    document.getElementById('footer-achievements-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage('achievements-page');
+        loadAchievementsPage();
+    });
+    document.getElementById('footer-leaderboard-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage('leaderboard-page');
+        loadLeaderboardPage();
+    });
+    document.getElementById('footer-settings-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        showPage('settings-page');
+        loadSettingsPage();
+    });
     </script>
 </body>
 </html>
